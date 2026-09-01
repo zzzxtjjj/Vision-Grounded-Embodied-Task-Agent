@@ -1,10 +1,53 @@
+# Python bytecode and test/tool caches
 __pycache__/
-*.pyc
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
 
+# Local environments and credentials
 .env
+.env.*
+!.env.example
 .venv/
+venv/
+env/
 
+# IDE and editor-local files
 .vscode/
 .idea/
+*.code-workspace
+*.swp
+*.swo
+*~
 
+# Logs and temporary files
 *.log
+*.tmp
+*.temp
+*.bak
+
+# Local package/model download caches
+.cache/
+.huggingface/
+huggingface_cache/
+transformers_cache/
+torch_cache/
+pip-wheel-metadata/
+
+# Notebook and operating-system files
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Runtime vision debug outputs (formal results/ remains tracked)
+/camera_depth.npy
+/camera_rgb.png
+/camera_segmentation.png
+/segmentation_mask.npy
+/segmentation_mask.png
+/debug/

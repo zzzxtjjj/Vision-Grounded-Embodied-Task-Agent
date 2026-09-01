@@ -8,30 +8,29 @@ import mujoco.viewer
 from openai import OpenAI
 from dotenv import load_dotenv
 from vision.perception import PerceptionSystem
-from vision.verifier import (
-    VisualPickVerifier,
-    VisualPlaceVerifier,
-)
 
 from place_regions import get_place_target
+from core.state_manager import RobotStateManager
+from core.recovery_policy import RecoveryPolicy
+from core.action_guard import ActionGuard
+from evaluation.gt_evaluator import GTEvaluator
 
-# ==================== Pick失败测试开关 ====================
+# ==================== Benchmark / Failure Injection ====================
 
-# False：
-# 正常使用视觉系统估计的抓取位置。
-#
-# True：
-# 仅用于测试 VisualPickVerifier，
-# 人为把抓取位置沿 X 方向偏移 10 cm，
-# 让机械臂大概率抓不到方块。
-#
-# 测试结束后必须改回 False。
+# 人为制造执行偏差，用于 Benchmark 故障注入。
 DEBUG_FORCE_PICK_FAILURE = False
-
 DEBUG_PICK_OFFSET = np.array(
     [0.10, 0.0, 0.0],
     dtype=float,
 )
+DEBUG_FORCE_INVALID_ACTION = False
+DEBUG_FORCE_PLACE_FAILURE = False
+DEBUG_PLACE_OFFSET = np.array(
+    [0.10, 0.0, 0.0],
+    dtype=float,
+)
+DEBUG_PLACE_FAILURE_USED = False
+
 # ==================== Qwen ====================
 
 load_dotenv()
@@ -53,8 +52,6 @@ mujoco.mj_resetDataKeyframe(model, data, model.keyframe("home").id)
 mujoco.mj_forward(model, data)
 
 gripper_id = model.site("gripper").id
-box_id = model.body("box").id
-
 
 GRIPPER_OPEN = float(data.qpos[7])
 GRIPPER_CLOSED = 0.010
@@ -69,20 +66,6 @@ VISION_TARGET = "green cube"
 # Agent 后面不再直接调用 vision_system.py，
 # 而是统一通过 PerceptionSystem 获取视觉结果。
 perception = PerceptionSystem()
-
-# ==================== pick视觉验证系统 ====================
-
-pick_verifier = VisualPickVerifier(
-    min_lift_height=0.05
-)
-
-# ==================== Place视觉验证系统 ====================
-
-place_verifier = VisualPlaceVerifier(
-    xy_tolerance=0.06
-)
-
-# ==========================================================
 
 # 夹爪保持垂直向下
 R_des = np.array([
@@ -208,41 +191,24 @@ def open_gripper(viewer=None):
 def close_gripper(viewer=None):
     move_fingers(GRIPPER_CLOSED, 1000, viewer)
 
-
-# ==================== Ground Truth ====================
-# 这里只用于判断实验是否成功。
-# 不再用于决定机器人去哪抓。
-
-def get_box_pos():
-    mujoco.mj_forward(model, data)
-    return data.xpos[box_id].copy()
-
-
 # ==================== Robot State ====================
 
-robot_state = {
-    "holding": None,
-    "last_action": None,
-    "last_success": None,
-    "last_target": None
-}
-
-def reset_task_history():
-    """
-    开始一个新用户任务时，清除上一个任务的执行历史。
-
-    注意：
-    holding 不重置，因为它表示机器人当前真实是否抓着物体。
-    """
-    robot_state["last_action"] = None
-    robot_state["last_success"] = None
-    robot_state["last_target"] = None
+state_manager = RobotStateManager()
+recovery_policy = RecoveryPolicy(max_retries=2)
+action_guard = ActionGuard()
+gt_evaluator = GTEvaluator(
+    min_lift_height=0.05,
+    max_gripper_distance=0.08,
+)
 
 # ==================== Vision Pick Skill ====================
 
 def pick_object_at(grasp_position, viewer=None):
     """
     根据视觉系统给出的世界坐标抓取物体。
+
+    返回 True 只表示 Pick Skill 的机器人动作正常执行完成，
+    不表示 GT 已证明抓取成功。
 
     grasp_position:
         [x, y, z]
@@ -252,41 +218,33 @@ def pick_object_at(grasp_position, viewer=None):
 
     grasp_position = np.asarray(grasp_position, dtype=float)
 
-    print("\n  [Pick] 视觉抓取位置:", grasp_position)
-
-    
+    print("\n[Pick] 视觉抓取位置:", grasp_position)
 
     # 根据视觉位置生成三个运动关键点
     pre_grasp = grasp_position + np.array([0.0, 0.0, 0.10])
     grasp_pos = grasp_position.copy()
     lift_pos = grasp_position + np.array([0.0, 0.0, 0.20])
 
-    print("  [Pick] pre_grasp:", pre_grasp)
-    print("  [Pick] grasp_pos:", grasp_pos)
-    print("  [Pick] lift_pos:", lift_pos)
+    print("[Pick] pre_grasp:", pre_grasp)
+    print("[Pick] grasp_pos:", grasp_pos)
+    print("[Pick] lift_pos:", lift_pos)
 
-    print("  [Pick] 打开夹爪")
+    print("[Pick] 打开夹爪")
     open_gripper(viewer)
 
-    print("  [Pick] 移动到视觉目标上方")
+    print("[Pick] 移动到视觉目标上方")
     move_arm_to(pre_grasp, 4.0, viewer)
 
-    print("  [Pick] 下降到视觉抓取位置")
+    print("[Pick] 下降到视觉抓取位置")
     move_arm_to(grasp_pos, 3.5, viewer)
 
-    print("  [Pick] 闭合夹爪")
+    print("[Pick] 闭合夹爪")
     close_gripper(viewer)
 
-    print("  [Pick] 抬起")
+    print("[Pick] 抬起")
     move_arm_to(lift_pos, 4.0, viewer)
 
-    print("  [Pick] 机械臂动作执行完成")
-
-    # 注意：
-    # 这里不再判断 Pick 是否成功。
-    #
-    # pick_object_at() 只负责“执行动作”。
-    # 成功判断交给外层的 VisualPickVerifier。
+    print("[Pick] 机械臂动作执行完成")
     return True
 
 
@@ -294,39 +252,60 @@ def pick_object_at(grasp_position, viewer=None):
 
 def place_object(target, viewer=None):
     """
-    使用固定 Workspace 目标执行 Place，
-    并通过视觉判断最终是否放置成功。
-    Runtime 不读取物体 Ground Truth。
+    使用固定 Workspace 目标执行 Place。
+
+    返回的 success 只表示机器人动作正常执行完成，
+    不表示 GT 已证明物体放置成功。
     """
 
     # 1. 获取固定放置目标
     try:
         target_position = get_place_target(target)
     except ValueError as e:
-        print("  [Place] 非法放置目标:", e)
-        return False
+        print("[Place] 非法放置目标:", e)
+        return False, "invalid_target", False
 
-    print(f"\n  [Place] 目标区域: {target}")
-    print("  [Place] 固定目标:", target_position)
+    print(f"\n[Place] 目标区域: {target}")
+    print("[Place] 固定目标:", target_position)
+
+    global DEBUG_PLACE_FAILURE_USED
+    execution_target = target_position.copy()
+    if (
+        DEBUG_FORCE_PLACE_FAILURE
+        and not DEBUG_PLACE_FAILURE_USED
+    ):
+        execution_target = (
+            execution_target
+            + DEBUG_PLACE_OFFSET
+        )
+
+        DEBUG_PLACE_FAILURE_USED = True
+
+        print("[Debug] 强制制造 Place 失败")
+        print(
+            "[Debug] 实际执行位置:",
+            execution_target,
+        )
 
     # 2. 生成运动关键点
-    above = target_position + np.array([0.0, 0.0, 0.20])
-    place_position = target_position.copy()
-    retreat = target_position + np.array([0.0, 0.0, 0.10])
-
-    print("  [Place] above:", above)
-    print("  [Place] place:", place_position)
-    print("  [Place] retreat:", retreat)
+    above = execution_target + np.array([0.0, 0.0, 0.20])
+    place_position = execution_target.copy()
+    retreat = execution_target + np.array([0.0, 0.0, 0.10])
+    print("[Place] above:", above)
+    print("[Place] place:", place_position)
+    print("[Place] retreat:", retreat)
 
     # 3. 执行 Place
-    print(f"  [Place] 移动到 {target} 上方")
+    print(f"[Place] 移动到 {target} 上方")
     move_arm_to(above, 4.0, viewer)
 
-    print("  [Place] 下降")
+    print("[Place] 下降")
     move_arm_to(place_position, 3.5, viewer)
 
-    print("  [Place] 松开夹爪")
+    print("[Place] 松开夹爪")
     open_gripper(viewer)
+
+    released = True
 
     # 等待物体落稳
     for _ in range(300):
@@ -334,31 +313,11 @@ def place_object(target, viewer=None):
         if viewer:
             viewer.sync()
 
-    print("  [Place] 撤离")
+    print("[Place] 撤离")
     move_arm_to(retreat, 3.0, viewer)
 
-    # 4. Place 后重新进行视觉观察
-    print("  [Vision] Place 后重新观察:", VISION_TARGET)
-
-    after_observation = perception.observe_object(
-        target_name=VISION_TARGET,
-        mj_model=model,
-        mj_data=data,
-    )
-
-    # 5. 视觉验证
-    verification = place_verifier.verify(
-        observation=after_observation,
-        target_position=target_position,
-    )
-
-    print("  [Verifier] status =", verification.status)
-    print("  [Verifier] message =", verification.message)
-    print("  [Verifier] object_position =", verification.object_position)
-    print("  [Verifier] target_position =", verification.target_position)
-    print("  [Verifier] xy_error =", verification.xy_error)
-
-    return verification.success
+    print("[Place] 机械臂动作执行完成")
+    return True, None, True
 
 
 # ==================== Qwen Planner ====================
@@ -366,115 +325,352 @@ def place_object(target, viewer=None):
 SYSTEM_PROMPT = """
 你是 Franka Panda 机械臂的高层任务规划器。
 
-用户会给出最终任务，例如：
+你的任务：
+根据用户自然语言任务和当前机器人状态，
+每次只生成下一步动作。
 
-“把方块拿起来”
-“把方块拿起来放到右边”
+====================
+允许动作
+====================
 
-你每次只能生成一个下一步动作。
-
-允许动作只有：
+只能输出以下动作：
 
 pick
 place
 finish
 
-place 的 target 只能是：
+
+place 动作的 target 只能是：
 
 left
 right
 center
 
-机器人状态包含：
+
+====================
+机器人状态说明
+====================
+
+当前状态包含：
 
 holding:
-当前是否抓着 box。
+表示机器人当前是否抓着物体。
+
+可能值：
+
+"box"
+表示当前抓着方块。
+
+None
+表示当前没有抓着方块。
+
 
 last_action:
-上一次执行动作。
+表示上一次尝试执行的动作。
 
-last_success:
-上一次动作是否成功。
+例如：
+
+"pick"
+
+"place"
+
+
+last_result:
+表示上一次动作执行结果。
+
+True:
+动作成功。
+
+False:
+动作失败。
+
+
+last_error:
+表示上一次动作失败的原因。
+
+可能值：
+
+null
+vision_failed
+motion_failed
+pick_failed
+place_failed
+invalid_target
+already_holding
+not_holding_box
+invalid_action
+
 
 last_target:
-上一次 place 的目标。
+表示上一次 place 的目标位置。
+
+例如：
+
+"left"
+
+"center"
+
+"right"
+
+
+history:
+表示当前任务执行历史。
+
+包含之前执行过的动作和结果。
+
+例如：
+
+[
+ {
+  "action":"pick",
+  "result":true
+ },
+ {
+  "action":"place",
+  "result":false
+ }
+]
 
 
 ====================
 任务完成规则
 ====================
 
-1. 如果用户只要求拿起方块：
 
-当 last_action == "pick"
-并且 last_success == true
+1.
+如果用户只要求拿起方块：
+
+例如：
+
+"把方块拿起来"
+
+
+当：
+
+last_action == "pick"
+
+并且：
+
+last_result == true
+
+
+说明抓取任务已经完成。
+
+
+下一步必须输出：
+
+{
+ "action":"finish",
+ "target":null
+}
+
+
+
+2.
+如果用户要求：
+
+"把方块拿起来放到右边"
+
+或者类似任务。
+
+
+当：
+
+last_action == "place"
+
+并且：
+
+last_result == true
+
+并且：
+
+last_target == 用户要求的位置
+
 
 说明任务已经完成。
 
-下一步必须输出 finish。
 
+下一步必须输出：
 
-2. 如果用户要求把方块放到某个位置：
+{
+ "action":"finish",
+ "target":null
+}
 
-例如“把方块拿起来放到右边”。
-
-当 last_action == "place"
-并且 last_success == true
-并且 last_target == "right"
-
-说明任务已经完成。
-
-下一步必须输出 finish。
-
-left 和 center 同样处理。
 
 
 ====================
 动作规划规则
 ====================
 
-1. 如果任务需要操作方块，
-   holding == null，
-   生成 pick。
+硬状态约束（最高优先级）：
 
-2. 如果 holding == "box"，
-   并且用户要求放置，
-   生成对应的 place。
+- holding == None 时，禁止输出 place。
+  如果任务仍需要放置方块，必须先输出 pick。
 
-3. 任务完成后必须生成 finish。
+- holding == "box" 时，禁止输出 pick。
+  如果任务需要放置，应该输出 place。
 
-4. 如果上一步失败，根据当前状态重新规划。
-
-
-====================
-禁止事项
-====================
-
-禁止语言模型生成：
-
-XYZ坐标
-关节角
-速度
-加速度
-力矩
-
-物体的位置由视觉系统负责，
-不是语言模型负责。
+- 如果上一次 place 失败，并且 holding == None，
+  说明物体已经释放。禁止直接再次 place，
+  必须先重新 pick，再继续后续任务。
 
 
-必须只返回 JSON：
+1.
+如果任务需要操作方块：
+
+并且：
+
+holding == None
+
+
+生成：
+
+pick
+
+
+例如：
+
+用户：
+"把方块拿起来"
+
+输出：
 
 {
-    "action": "pick/place/finish",
-    "target": "left/right/center 或 null"
+ "action":"pick",
+ "target":null
 }
+
+
+
+2.
+如果：
+
+holding == "box"
+
+并且：
+
+用户任务包含放置要求
+
+
+生成：
+
+place
+
+
+例如：
+
+用户：
+"把方块拿起来放到center"
+
+
+输出：
+
+{
+ "action":"place",
+ "target":"center"
+}
+
+
+
+3.
+如果：
+
+上一步动作失败：
+
+last_result == false
+
+
+根据：
+last_action
+
+last_error
+
+history
+
+
+重新规划。
+
+
+不要假设动作一定成功。
+
+
+例如：
+
+如果：
+
+vision_failed
+
+可以重新尝试观察。
+
+
+如果：
+
+pick_failed
+
+可以重新执行pick。
+
+
+如果：
+
+place_failed
+
+可以重新规划place。
+
+
+====================
+视觉系统规则
+====================
+
+
+物体位置由视觉系统负责。
+
+你不能生成：
+
+- XYZ坐标
+- 关节角
+- 速度
+- 加速度
+- 力矩
+
+
+禁止根据物体位置规划。
+
+
+你只负责：
+
+任务理解
+
+动作选择
+
+高层规划
+
+
+
+====================
+输出格式
+====================
+
+
+必须只返回 JSON。
+
+
+格式：
+
+{
+ "action":"pick/place/finish",
+ "target":"left/right/center 或 null"
+}
+
+
+不要输出任何解释文字。
 """
 
 
 def ask_qwen(goal):
     # 不再把真实 box_position 告诉 Qwen
     state = {
-        **robot_state,
+        **state_manager.get_state(),
         "gripper_position": np.round(
             data.site_xpos[gripper_id], 3
         ).tolist()
@@ -504,36 +700,33 @@ def ask_qwen(goal):
 
 # ==================== Executor ====================
 
-def execute_action(action, viewer=None):
+def execute_action(action, viewer=None, vision_records=None):
+    error = None
     action_type = action.get("action")
     target = action.get("target")
+    state_manager.update_action(action_type)
 
     # ---------- Pick ----------
     if action_type == "pick":
 
-        if robot_state["holding"] is not None:
+        if state_manager.get_state()["holding"] is not None:
+
+            error = "already_holding"
+
             print("非法动作：已经抓着物体")
+
+            state_manager.update_result(False)
+            state_manager.update_error(error)
+
+            state_manager.add_history(
+                action_type,
+                False,
+                error
+            )
+
             return False
 
-        print("\n  [Vision] 开始定位目标:", VISION_TARGET)
-
-        # ------------------------------------------------------
-        # 通过统一的 PerceptionSystem 进行视觉观察
-        # ------------------------------------------------------
-        #
-        # 现在 Agent 不再直接调用：
-        #
-        # get_object_position(...)
-        #
-        # 而是得到一个结构化的 ObjectObservation。
-        #
-        # observation 中包含：
-        #
-        # target_name
-        # success
-        # grasp_position
-        # error
-        # ------------------------------------------------------
+        print("\n[Vision] 开始定位目标:", VISION_TARGET)
 
         before_observation = perception.observe_object(
             target_name=VISION_TARGET,
@@ -541,166 +734,145 @@ def execute_action(action, viewer=None):
             mj_data=data,
         )
 
-        # ------------------------------------------------------
-        # 判断视觉感知是否成功
-        # ------------------------------------------------------
-
         if not before_observation.success:
+            if vision_records is not None:
+                vision_records.append({
+                    "success": False,
+                    "localization_error": None,
+                })
 
             print(
-                "  [Vision] 定位失败:",
+                "[Vision] 定位失败:",
                 before_observation.error,
             )
+
+            error = "vision_failed"
+            state_manager.update_error(error)
 
             success = False
 
         else:
+            # Evaluation 只读取原始 Vision 输出，不读取故障注入后的抓取点。
+            try:
+                vision_eval = gt_evaluator.evaluate_vision(
+                    model,
+                    data,
+                    before_observation.grasp_position,
+                )
 
-            # --------------------------------------------------
-            # 从结构化视觉结果中获取抓取位置
-            # --------------------------------------------------
+                print("\n[GT Vision Evaluation]")
+                print("success =", vision_eval["success"])
+                print(
+                    "localization_error =",
+                    vision_eval["localization_error"],
+                )
+
+                if vision_records is not None:
+                    vision_records.append({
+                        "success": True,
+                        "localization_error": (
+                            vision_eval["localization_error"]
+                        ),
+                    })
+            except Exception as e:
+                print("\n[GT Vision Evaluation]")
+                print("evaluation_error =", e)
 
             grasp_position = before_observation.grasp_position
-            # ------------------------------------------------------
-            # 仅用于 VisualPickVerifier 的失败测试
-            # ------------------------------------------------------
 
+            # Benchmark / Failure Injection：人为偏移实际执行抓取点。
             if DEBUG_FORCE_PICK_FAILURE:
-
                 grasp_position = (
                     grasp_position
                     + DEBUG_PICK_OFFSET
                 )
 
+                print("[Debug] 强制制造 Pick 失败")
                 print(
-                    "  [Debug] 强制制造 Pick 失败"
-                )
-
-                print(
-                    "  [Debug] 偏移后的抓取位置:",
+                    "[Debug] 偏移后的抓取位置:",
                     grasp_position,
                 )
-            print("  [Vision] 定位完成")
 
-            print(
-                "  [Vision] 目标:",
-                before_observation.target_name,
-            )
-
-            print(
-                "  [Vision] 世界坐标抓取点:",
-                grasp_position,
-            )
-
-            # --------------------------------------------------
-            # 视觉成功后，才允许进入 Pick Skill
-            # --------------------------------------------------
-
-            # ------------------------------------------------------
-            # 1. 执行 Pick 动作
-            # ------------------------------------------------------
+            print("[Vision] 定位完成")
+            print("[Vision] 目标:", before_observation.target_name)
+            print("[Vision] 世界坐标抓取点:", grasp_position)
 
             execution_completed = pick_object_at(
                 grasp_position,
                 viewer,
             )
 
-            # ------------------------------------------------------
-            # 2. 如果机械臂执行阶段本身失败，就不继续视觉验证
-            # ------------------------------------------------------
-
             if not execution_completed:
+                print("[Pick] 机械臂执行过程失败")
 
-                print(
-                    "  [Pick] 机械臂执行过程失败"
-                )
-
+                error = "motion_failed"
                 success = False
-
             else:
+                success = True
+                error = None
 
-                # --------------------------------------------------
-                # 3. Pick 后重新进行一次视觉观察
-                # --------------------------------------------------
-                #
-                # 这是闭环里非常重要的一步：
-                #
-                # Observe
-                #   ↓
-                # Act
-                #   ↓
-                # Observe Again
-                # --------------------------------------------------
-
-                print(
-                    "  [Vision] Pick 后重新观察目标:",
-                    VISION_TARGET,
-                )
-
-                after_observation = (
-                    perception.observe_object(
-                        target_name=VISION_TARGET,
-                        mj_model=model,
-                        mj_data=data,
-                    )
-                )
-
-                # --------------------------------------------------
-                # 4. 使用纯视觉 Verifier 判断 Pick 是否成功
-                # --------------------------------------------------
-
-                verification = pick_verifier.verify(
-                    before=before_observation,
-                    after=after_observation,
-                )
-
-                print(
-                    "  [Verifier] status =",
-                    verification.status,
-                )
-
-                print(
-                    "  [Verifier] message =",
-                    verification.message,
-                )
-
-                print(
-                    "  [Verifier] height_change =",
-                    verification.height_change,
-                )
-
-                # --------------------------------------------------
-                # 5. 最终 Pick 成功与否来自视觉 Verifier
-                # --------------------------------------------------
-
-                success = verification.success
-
-        robot_state["holding"] = "box" if success else None
+        state_manager.update_error(error)
+        state_manager.update_holding("box" if success else None)
 
     # ---------- Place ----------
     elif action_type == "place":
 
-        if robot_state["holding"] != "box":
+        if state_manager.get_state()["holding"] != "box":
+
+            error = "not_holding_box"
+
             print("非法动作：当前没有抓住 box")
+
+            state_manager.update_result(False)
+            state_manager.update_error(error)
+
+            state_manager.add_history(
+                action_type,
+                False,
+                error
+            )
+
             return False
 
-        success = place_object(target, viewer)
+        success, error, released = place_object(
+            target,
+            viewer
+        )
 
-        if success:
-            robot_state["holding"] = None
+        state_manager.update_error(error)
+        state_manager.update_target(target)
 
-        robot_state["last_target"] = target
+        # 只要已经执行松爪，
+        # 无论后续执行结果如何，都不能继续认为手里有方块
+        if released:
+            state_manager.update_holding(None)
 
     # ---------- Finish ----------
     elif action_type == "finish":
         return "finish"
 
     else:
+        error = "invalid_action"
+
         print("非法 action:", action_type)
+
+        state_manager.update_result(False)
+        state_manager.update_error(error)
+
+        state_manager.add_history(
+            action_type,
+            False,
+            error
+        )
+
         return False
 
-    robot_state["last_action"] = action_type
-    robot_state["last_success"] = success
+    state_manager.update_result(success)
+    state_manager.add_history(
+        action_type,
+        success,
+        state_manager.get_error(),
+    )
 
     return success
 
@@ -708,35 +880,254 @@ def execute_action(action, viewer=None):
 # ==================== Step-by-Step Agent ====================
 
 def run_task(goal, viewer):
-    MAX_STEPS = 5
+    global DEBUG_PLACE_FAILURE_USED
+    DEBUG_PLACE_FAILURE_USED = False
+    vision_records = []
+    action_records = []
+    planner_steps = 0
+    invalid_actions = 0
+    recovery_attempts = 0
+    recovery_successes = 0
+    recovery_pending = False
+    episode_data = {}
 
-    # 新任务开始，清除上一个任务的执行历史
-    reset_task_history()
-
-    print("\n用户任务：", goal)
-    print("当前机器人状态：", robot_state)
-
-    for step in range(1, MAX_STEPS + 1):
-        print(f"\n========== Step {step} ==========")
+    try:
+        MAX_STEPS = 8
+        state_manager.reset_task()
 
         try:
-            action = ask_qwen(goal)
-
+            gt_evaluator.start_episode(
+                model,
+                data,
+            )
         except Exception as e:
-            print("Qwen 调用失败：", e)
-            return
+            print("\n[GT Evaluation]")
+            print("start_episode_error =", e)
 
-        print("Qwen 下一步：", action)
+        print("\n用户任务：", goal)
+        print("当前机器人状态：", state_manager.get_state())
 
-        result = execute_action(action, viewer)
+        for step in range(1, MAX_STEPS + 1):
+            print(f"\n========== Step {step} ==========")
 
-        if result == "finish":
-            print("\n任务完成")
-            return
+            try:
+                action = ask_qwen(goal)
+                planner_steps += 1
+            except Exception as e:
+                print("Qwen 调用失败：", e)
+                return episode_data
 
-        print("执行结果：", result)
+            if (
+                DEBUG_FORCE_INVALID_ACTION
+                and step == 1
+                and state_manager.get_state()["holding"] is None
+            ):
+                action = {
+                    "action": "place",
+                    "target": "center"
+                }
 
-    print("\n达到最大步骤数，停止任务")
+                print("[Debug] 强制制造非法 Planner 动作")
+
+            print("Qwen 下一步：", action)
+
+            guard_result = action_guard.validate(
+                action,
+                state_manager.get_state()
+            )
+
+            if not guard_result["valid"]:
+                invalid_actions += 1
+                action_type = action.get("action")
+                error = guard_result["error"]
+
+                print(
+                    f"[Action Guard] 拦截非法动作: "
+                    f"action={action_type}, error={error}"
+                )
+
+                state_manager.update_action(action_type)
+                state_manager.update_result(False)
+                state_manager.update_error(error)
+
+                state_manager.add_history(
+                    action_type,
+                    False,
+                    error
+                )
+
+                recovery = recovery_policy.decide(
+                    state_manager.get_state()
+                )
+
+                mode = recovery["mode"]
+                reason = recovery["reason"]
+
+                if mode in {"retry", "replan"}:
+                    recovery_attempts += 1
+                    recovery_pending = True
+
+                print(
+                    f"[Recovery] mode={mode}, reason={reason}"
+                )
+
+                if mode == "replan":
+                    continue
+
+                if mode == "abort":
+                    print(
+                        f"[Recovery] 任务终止，原因: {reason}"
+                    )
+                    return episode_data
+
+                print(
+                    f"[Action Guard] 非法动作无法安全处理，"
+                    f"mode={mode}"
+                )
+                return episode_data
+
+            while True:
+                result = execute_action(
+                    action,
+                    viewer,
+                    vision_records,
+                )
+
+                if (
+                    action.get("action") == "pick"
+                    and result is True
+                ):
+                    try:
+                        pick_eval = gt_evaluator.evaluate_pick(
+                            model,
+                            data,
+                        )
+
+                        print("\n[GT Pick Evaluation]")
+                        print(
+                            "success =",
+                            pick_eval["success"],
+                        )
+                        print(
+                            "lift_height =",
+                            pick_eval["lift_height"],
+                        )
+                        print(
+                            "gripper_distance =",
+                            pick_eval["gripper_distance"],
+                        )
+                        action_records.append({
+                            "action": "pick",
+                            "target": None,
+                            "gt_success": pick_eval["success"],
+                            "lift_height": pick_eval["lift_height"],
+                            "gripper_distance": (
+                                pick_eval["gripper_distance"]
+                            ),
+                        })
+                    except Exception as e:
+                        print("\n[GT Pick Evaluation]")
+                        print("evaluation_error =", e)
+
+                if (
+                    action.get("action") == "place"
+                    and result is True
+                ):
+                    try:
+                        target_position = get_place_target(
+                            action.get("target")
+                        )
+                        place_eval = gt_evaluator.evaluate_place(
+                            model,
+                            data,
+                            target_position,
+                        )
+
+                        print("\n[GT Place Evaluation]")
+                        print(
+                            "success =",
+                            place_eval["success"],
+                        )
+                        print(
+                            "xy_error =",
+                            place_eval["xy_error"],
+                        )
+                        action_records.append({
+                            "action": "place",
+                            "target": action.get("target"),
+                            "gt_success": place_eval["success"],
+                            "position_error": place_eval["xy_error"],
+                        })
+                    except Exception as e:
+                        print("\n[GT Place Evaluation]")
+                        print("evaluation_error =", e)
+
+                if result == "finish":
+                    print("\n任务完成")
+                    return episode_data
+
+                print("执行结果：", result)
+
+                if result is True:
+                    if recovery_pending:
+                        recovery_successes += 1
+                        recovery_pending = False
+                    break
+
+                recovery = recovery_policy.decide(
+                    state_manager.get_state()
+                )
+
+                mode = recovery["mode"]
+                reason = recovery["reason"]
+
+                if mode in {"retry", "replan"}:
+                    recovery_attempts += 1
+                    recovery_pending = True
+
+                print(
+                    f"[Recovery] mode={mode}, reason={reason}"
+                )
+
+                if mode == "retry":
+                    continue
+
+                if mode == "replan":
+                    break
+
+                if mode == "abort":
+                    print(
+                        f"[Recovery] 任务终止，原因: {reason}"
+                    )
+                    return episode_data
+
+                print(
+                    f"[Recovery] 未知恢复模式，任务终止: {mode}"
+                )
+                return episode_data
+
+        print("\n达到最大步骤数，停止任务")
+
+    finally:
+        episode_data.update({
+            "task": goal,
+            "vision_records": vision_records,
+            "action_records": action_records,
+            "planner_steps": planner_steps,
+            "invalid_actions": invalid_actions,
+            "recovery_attempts": recovery_attempts,
+            "recovery_successes": recovery_successes,
+        })
+
+        print("\n[Benchmark Episode Data]")
+        print("vision_records =", vision_records)
+        print("action_records =", action_records)
+        print("planner_steps =", planner_steps)
+        print("invalid_actions =", invalid_actions)
+        print("recovery_attempts =", recovery_attempts)
+        print("recovery_successes =", recovery_successes)
+
+    return episode_data
 
 
 # ==================== Main ====================
@@ -758,7 +1149,6 @@ def main():
 
             if command:
                 run_task(command, viewer)
-
 
 if __name__ == "__main__":
     main()

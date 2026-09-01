@@ -1,0 +1,8 @@
+matplotlib==3.11.0
+mujoco
+numpy==2.5.0
+openai
+Pillow==12.2.0
+python-dotenv
+torch==2.12.1
+transformers==5.12.1

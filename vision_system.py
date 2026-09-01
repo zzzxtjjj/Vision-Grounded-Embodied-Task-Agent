@@ -24,8 +24,8 @@ torch_dtype = torch.float16 if device == "cuda" else torch.float32
 # ==================== Florence-2 ====================
 # 这里只加载一次模型，不会每次抓取都重新加载
 
-print("  [Vision] Florence-2 device:", device)
-print("  [Vision] 正在加载 Florence-2...")
+print("[Vision] Florence-2 device:", device)
+print("[Vision] 正在加载 Florence-2...")
 
 processor = AutoProcessor.from_pretrained(MODEL_ID)
 
@@ -34,7 +34,7 @@ florence_model = Florence2ForConditionalGeneration.from_pretrained(
     dtype=torch_dtype
 ).to(device)
 
-print("  [Vision] Florence-2 加载完成")
+print("[Vision] Florence-2 加载完成")
 
 
 # ==================== 实时 RGB-D ====================
@@ -241,8 +241,8 @@ def estimate_grasp_position(mask, depth, mj_model, mj_data):
     if valid_count < 20:
         raise RuntimeError("Depth过滤后有效点太少")
 
-    print("  [Vision] Mask像素数量:", np.sum(mask))
-    print("  [Vision] Depth有效像素:", valid_count)
+    print("[Vision] Mask像素数量:", np.sum(mask))
+    print("[Vision] Depth有效像素:", valid_count)
 
     # --------------------
     # 3. 当前相机外参 Camera 在世界什么位置、朝哪个方向
@@ -301,7 +301,7 @@ def estimate_grasp_position(mask, depth, mj_model, mj_data):
 
     points_world = (camera_rot @ points_camera.T).T + camera_pos
 
-    print("  [Vision] Point Cloud:", points_world.shape)
+    print("[Vision] Point Cloud:", points_world.shape)
 
     # --------------------
     # 8. 找物体顶部
@@ -333,69 +333,17 @@ def estimate_grasp_position(mask, depth, mj_model, mj_data):
         object_center_z + 0.005
     ])
 
-    print("  [Vision] top_z:", top_z)
-    print("  [Vision] bottom_z:", bottom_z)
-    print("  [Vision] grasp_position:", grasp_position)
+    object_height = top_z - bottom_z
 
-    return grasp_position
+    geometry_info = {
+        "top_z": float(top_z),
+        "bottom_z": float(bottom_z),
+        "object_height": float(object_height)
+    }
 
+    print("[Vision] top_z:", top_z)
+    print("[Vision] bottom_z:", bottom_z)
+    print("[Vision] object_height:", object_height)
+    print("[Vision] grasp_position:", grasp_position)
 
-# ==================== 对外总接口 ====================
-
-def get_object_position(target_name, mj_model, mj_data):
-    """
-    完整实时视觉定位流程：
-
-    当前Camera
-        ↓
-    RGB + Depth
-        ↓
-    Florence-2
-        ↓
-    Mask
-        ↓
-    Depth过滤
-        ↓
-    Point Cloud
-        ↓
-    World XYZ
-        ↓
-    grasp_position
-    """
-
-    print("  [Vision] 实时拍摄 RGB-D")
-
-    rgb, depth = capture_rgbd(mj_model, mj_data)
-
-    print("  [Vision] RGB shape:", rgb.shape)
-    print("  [Vision] Depth shape:", depth.shape)
-
-    print("  [Vision] Florence-2 正在分割:", target_name)
-
-    mask, image, mask_image, polygons = segment_object(
-        rgb,
-        target_name
-    )
-
-    print("  [Vision] 分割完成")
-
-    # 只是保存调试图片，不参与控制
-    save_debug_results(
-        rgb,
-        depth,
-        image,
-        mask,
-        mask_image,
-        polygons
-    )
-
-    print("  [Vision] 开始 Depth + Point Cloud 三维定位")
-
-    grasp_position = estimate_grasp_position(
-        mask,
-        depth,
-        mj_model,
-        mj_data
-    )
-
-    return grasp_position
+    return grasp_position, geometry_info

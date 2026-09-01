@@ -1,0 +1,1474 @@
+{
+  "num_episodes": 60,
+  "summary": {
+    "task_success_rate": 0.75,
+    "vision_success_rate": 1.0,
+    "mean_localization_error": 0.006209735334806714,
+    "pick_success_rate": 1.0,
+    "place_success_rate": 0.9333333333333333,
+    "mean_place_error": 0.01133703949968665,
+    "invalid_action_rate": 0.05660377358490566,
+    "average_planner_steps": 2.65,
+    "recovery_success_rate": 1.0
+  },
+  "episodes": [
+    {
+      "task": "把方块拿起来",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        }
+      ],
+      "planner_steps": 2,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "抓起绿色方块",
+      "task_success": false,
+      "vision_records": [],
+      "action_records": [],
+      "planner_steps": 1,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把绿色方块抓起来",
+      "task_success": false,
+      "vision_records": [],
+      "action_records": [],
+      "planner_steps": 1,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把桌上的方块拿起来",
+      "task_success": false,
+      "vision_records": [],
+      "action_records": [],
+      "planner_steps": 1,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "请拿起这个绿色方块",
+      "task_success": false,
+      "vision_records": [],
+      "action_records": [],
+      "planner_steps": 1,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把这个方块从桌面抓起来",
+      "task_success": false,
+      "vision_records": [],
+      "action_records": [],
+      "planner_steps": 1,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "抓住绿色物体并拿起来",
+      "task_success": false,
+      "vision_records": [],
+      "action_records": [],
+      "planner_steps": 1,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "请把绿色立方体提起来",
+      "task_success": false,
+      "vision_records": [],
+      "action_records": [],
+      "planner_steps": 1,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把桌面上的绿色立方体抓起",
+      "task_success": false,
+      "vision_records": [],
+      "action_records": [],
+      "planner_steps": 1,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "拿起桌上的绿色物体",
+      "task_success": false,
+      "vision_records": [],
+      "action_records": [],
+      "planner_steps": 1,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "pick up the green cube",
+      "task_success": false,
+      "vision_records": [],
+      "action_records": [],
+      "planner_steps": 1,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "lift the green cube",
+      "task_success": false,
+      "vision_records": [],
+      "action_records": [],
+      "planner_steps": 1,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把方块拿起来放到左边",
+      "task_success": false,
+      "vision_records": [],
+      "action_records": [
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": false,
+          "position_error": 0.11999999995129793
+        }
+      ],
+      "planner_steps": 2,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把绿色方块放到左边",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": true,
+          "position_error": 0.003474042298543966
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把方块移动到左侧",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": true,
+          "position_error": 0.003474042298543966
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "请将绿色方块放在左边",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": true,
+          "position_error": 0.003474042298543966
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把桌上的方块搬到左侧区域",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": true,
+          "position_error": 0.003474042298543966
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "将绿色立方体移动到左边",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": true,
+          "position_error": 0.003474042298543966
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "请把这个物体放到左侧",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": true,
+          "position_error": 0.003474042298543966
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把方块抓起来，然后放左边",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": true,
+          "position_error": 0.003474042298543966
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把绿色物体搬到左边去",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": true,
+          "position_error": 0.003474042298543966
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "绿色方块放左边",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": true,
+          "position_error": 0.003474042298543966
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "move the green cube to the left",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": true,
+          "position_error": 0.003474042298543966
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "place the green cube on the left",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": true,
+          "position_error": 0.003474042298543966
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把方块拿起来放到中间",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把绿色方块放到中间",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "将方块移动到中央区域",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "请把绿色方块放在中间",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把桌上的方块搬到中心",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把绿色立方体移到中央",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "请把这个物体放到中间区域",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "抓起方块，然后放到正中间",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把绿色物体搬到中间去",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "绿色方块放中间",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "move the green cube to the center",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "place the green cube in the center",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把方块拿起来放到右边",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把绿色方块放到右边",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "将方块移动到右侧",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "请把绿色方块放在右边",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把桌上的方块搬到右侧区域",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "将绿色立方体移动到右边",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "请把这个物体放到右侧",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把方块抓起来，然后放右边",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把绿色物体搬到右边去",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "绿色方块放右边",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "move the green cube to the right",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "place the green cube on the right",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把方块拿起来",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 1,
+      "recovery_attempts": 1,
+      "recovery_successes": 1
+    },
+    {
+      "task": "抓起绿色方块",
+      "task_success": false,
+      "vision_records": [],
+      "action_records": [],
+      "planner_steps": 1,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把方块放到左边",
+      "task_success": false,
+      "vision_records": [],
+      "action_records": [
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": false,
+          "position_error": 0.11999999995129793
+        }
+      ],
+      "planner_steps": 2,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把绿色物体移到左侧",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": true,
+          "position_error": 0.003474042298543966
+        }
+      ],
+      "planner_steps": 4,
+      "invalid_actions": 1,
+      "recovery_attempts": 1,
+      "recovery_successes": 1
+    },
+    {
+      "task": "把方块放到中间",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 4,
+      "invalid_actions": 1,
+      "recovery_attempts": 1,
+      "recovery_successes": 1
+    },
+    {
+      "task": "把绿色物体移到中央",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 4,
+      "invalid_actions": 1,
+      "recovery_attempts": 1,
+      "recovery_successes": 1
+    },
+    {
+      "task": "把方块放到右边",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 4,
+      "invalid_actions": 1,
+      "recovery_attempts": 1,
+      "recovery_successes": 1
+    },
+    {
+      "task": "把绿色物体移到右侧",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 4,
+      "invalid_actions": 1,
+      "recovery_attempts": 1,
+      "recovery_successes": 1
+    },
+    {
+      "task": "pick up the green cube",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 1,
+      "recovery_attempts": 1,
+      "recovery_successes": 1
+    },
+    {
+      "task": "move the cube to the left",
+      "task_success": false,
+      "vision_records": [],
+      "action_records": [
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": false,
+          "position_error": 0.11999999995129793
+        }
+      ],
+      "planner_steps": 2,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "move the cube to the center",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 4,
+      "invalid_actions": 1,
+      "recovery_attempts": 1,
+      "recovery_successes": 1
+    },
+    {
+      "task": "move the cube to the right",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 4,
+      "invalid_actions": 1,
+      "recovery_attempts": 1,
+      "recovery_successes": 1
+    }
+  ]
+}

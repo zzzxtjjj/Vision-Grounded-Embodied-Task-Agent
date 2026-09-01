@@ -285,3 +285,73 @@ Robot Motion Layer 后续主要由三个模块组成：
 
 ```text
 robot/
+```
+
+---
+
+# 6. Results
+
+V1 最终评测由 Main Benchmark 和 Complex Language Stress Test 组成：
+
+- **Main Benchmark:** 60 episodes — **Task Success: 100%**
+- **Complex Language Stress Test:** 30 episodes — **Task Success: 100%**
+- **Total evaluated episodes:** 90
+- **Mean 3D Localization Error:** about **6.21 mm**
+- **Mean Placement Error:** about **3.57 mm**
+
+其中，Failure Recovery benchmark contains deliberately injected invalid actions。相关结果用于验证 ActionGuard 与 Recovery 路径，不应解释为 Planner 的自然错误率。图中的 Run 1 是修复前的诊断基线，不计入上述 90 个 V1 最终评测 Episode。
+
+## 6.1 Benchmark Comparison
+
+![Benchmark comparison](results/figures/03_benchmark_comparison.png)
+
+第一轮 Benchmark 的 Task Success 为 75%，暴露了 cross-episode agent belief state leakage。完成 episode-level reset 修复后，相同的 60-case Main Benchmark 达到 100%；随后进行的 30-case complex-language stress test 同样达到 100%。
+
+## 6.2 Spatial Evaluation Errors
+
+![Mean spatial errors](results/figures/02_error_metrics.png)
+
+Main Benchmark 的 Mean 3D Localization Error 约为 6.21 mm，Mean Placement Error 约为 3.57 mm。MuJoCo ground truth 仅用于独立 Evaluation 和结果记录，不参与 Runtime 控制、任务规划、状态更新或恢复决策。
+
+## 6.3 Main Benchmark Success Rates
+
+![Main Benchmark success rates](results/figures/01_success_rates.png)
+
+在 Main Benchmark 中，Task、Vision、Pick、Place 和 Recovery 的成功率均为 100%。这些结果仅适用于 tested single-object MuJoCo workspace configuration，不代表任意真实机器人环境中的普遍成功率，也不构成 real-world robot performance 声明。
+
+---
+
+# 7. Running the Project
+
+从项目根目录安装直接依赖：
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+通过环境变量或本地 `.env` 配置 Qwen API credential：
+
+```dotenv
+DASHSCOPE_API_KEY=your_api_key_here
+base_url=your_compatible_api_base_url
+```
+
+不要将 API key 或本地 `.env` 提交到仓库。
+
+从项目根目录运行交互式 Agent：
+
+```bash
+python panda_qwen_agent.py
+```
+
+运行正式 Benchmark：
+
+```bash
+python run_benchmark.py
+```
+
+根据已有结果生成可视化：
+
+```bash
+python evaluation/plot_results.py
+```

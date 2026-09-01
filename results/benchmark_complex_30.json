@@ -1,0 +1,838 @@
+{
+  "num_episodes": 30,
+  "summary": {
+    "task_success_rate": 1.0,
+    "vision_success_rate": 1.0,
+    "mean_localization_error": 0.006209735334806714,
+    "pick_success_rate": 1.0,
+    "place_success_rate": 1.0,
+    "mean_place_error": 0.0035758959989118824,
+    "invalid_action_rate": 0.06818181818181818,
+    "average_planner_steps": 2.933333333333333,
+    "recovery_success_rate": 1.0
+  },
+  "episodes": [
+    {
+      "task": "请找到桌面上的绿色立方体，把它从当前的位置抓起来并保持在夹爪中。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        }
+      ],
+      "planner_steps": 2,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "现在不需要移动到其他区域，只需要把桌上的绿色方块拿起来。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        }
+      ],
+      "planner_steps": 2,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "先定位绿色物体，然后将这个立方体从桌面抓起。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        }
+      ],
+      "planner_steps": 2,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "完成一个抓取任务：目标是桌面上的绿色方块，抓起后不用放置。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        }
+      ],
+      "planner_steps": 2,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "Locate the green cube on the table and pick it up, but do not place it anywhere.",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        }
+      ],
+      "planner_steps": 2,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把那个绿色的立方体拿起来就可以了，暂时不要把它移动到左边、中间或者右边。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        }
+      ],
+      "planner_steps": 2,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "请先把桌上的绿色方块抓起来，随后把它移动到工作区域的左侧。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": true,
+          "position_error": 0.003474042298543966
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "目标不是中间也不是右边，请把绿色立方体最终放到左侧区域。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": true,
+          "position_error": 0.003474042298543966
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "完成抓取以后，把这个物体送到左边，最后让它停留在左侧位置。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": true,
+          "position_error": 0.003474042298543966
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "桌上有一个绿色方块，请拿起它，然后选择左侧作为最终放置区域。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": true,
+          "position_error": 0.003474042298543966
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "Pick up the green cube first, then move it to the left side of the workspace.",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": true,
+          "position_error": 0.003474042298543966
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "Grab the cube and place it on the left, not in the center or on the right.",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": true,
+          "position_error": 0.003474042298543966
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "请抓起绿色方块，并把它从当前位置移动到工作区域正中央。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "不要把这个方块留在左边或右边，最终应该把它放到中间区域。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "先完成对绿色立方体的抓取，之后把它放置在中央位置。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "把桌上的绿色物体拿起来，目标位置选择 center，也就是中间区域。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "Pick the green object up and place it in the middle of the workspace.",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "Move the cube to the center after picking it up; the left and right regions are not the target.",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "找到绿色立方体并抓住它，之后把它移动到工作空间右侧。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "最终目标是右侧区域，请先抓取桌面上的绿色方块再完成放置。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "不要放到左边，也不要停在中间，把这个绿色物体最终送到右边。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "执行一次抓取和放置：抓取绿色立方体，放置目标选择右侧。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "After locating and picking up the green cube, place it on the right side.",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "The final destination is the right region. Pick up the cube first and move it there.",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 0,
+      "recovery_attempts": 0,
+      "recovery_successes": 0
+    },
+    {
+      "task": "请定位桌上的绿色立方体并将它抓起来，抓取完成后保持拿住即可。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 1,
+      "recovery_attempts": 1,
+      "recovery_successes": 1
+    },
+    {
+      "task": "Locate the green cube, pick it up from the table, and keep holding it.",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        }
+      ],
+      "planner_steps": 3,
+      "invalid_actions": 1,
+      "recovery_attempts": 1,
+      "recovery_successes": 1
+    },
+    {
+      "task": "先抓住绿色方块，最终目标不是中央和右侧，而是把它放到左侧区域。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "left",
+          "gt_success": true,
+          "position_error": 0.003474042298543966
+        }
+      ],
+      "planner_steps": 4,
+      "invalid_actions": 1,
+      "recovery_attempts": 1,
+      "recovery_successes": 1
+    },
+    {
+      "task": "完成抓取后，把绿色立方体移动到中央区域，不要选择左右两侧。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "center",
+          "gt_success": true,
+          "position_error": 0.003503661473467813
+        }
+      ],
+      "planner_steps": 4,
+      "invalid_actions": 1,
+      "recovery_attempts": 1,
+      "recovery_successes": 1
+    },
+    {
+      "task": "请拿起桌上的绿色物体，并最终把它放到右侧，而不是左侧或中央。",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 4,
+      "invalid_actions": 1,
+      "recovery_attempts": 1,
+      "recovery_successes": 1
+    },
+    {
+      "task": "Pick up the green cube and place it on the right; the center and left regions are not the destination.",
+      "task_success": true,
+      "vision_records": [
+        {
+          "success": true,
+          "localization_error": 0.006209735334806715
+        }
+      ],
+      "action_records": [
+        {
+          "action": "pick",
+          "target": null,
+          "gt_success": true,
+          "lift_height": 0.1945721975068189,
+          "gripper_distance": 0.006852738510465941
+        },
+        {
+          "action": "place",
+          "target": "right",
+          "gt_success": true,
+          "position_error": 0.0037282231964973715
+        }
+      ],
+      "planner_steps": 4,
+      "invalid_actions": 1,
+      "recovery_attempts": 1,
+      "recovery_successes": 1
+    }
+  ]
+}

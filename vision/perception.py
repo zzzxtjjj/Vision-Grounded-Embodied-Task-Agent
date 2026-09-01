@@ -51,10 +51,12 @@ class PerceptionSystem:
     3D grasp_position
     """
 
-    def __init__(self, max_mask_ratio=0.10):
+    def __init__(self, max_mask_ratio=0.10, max_object_height=0.10):
         # 如果目标 Mask 占整张图片超过 10%，
         # 当前小方块场景中认为分割结果高度可疑。
         self.max_mask_ratio = float(max_mask_ratio)
+        # 最大物品高度阈值
+        self.max_object_height = float(max_object_height)
 
     def observe_object(self, target_name, mj_model, mj_data):
 
@@ -82,28 +84,28 @@ class PerceptionSystem:
             )
 
             # 1. 获取实时 RGB-D
-            print("  [Vision] 实时拍摄 RGB-D")
+            print("[Vision] 实时拍摄 RGB-D")
             rgb, depth = capture_rgbd(mj_model, mj_data)
 
-            print("  [Vision] RGB shape:", rgb.shape)
-            print("  [Vision] Depth shape:", depth.shape)
+            print("[Vision] RGB shape:", rgb.shape)
+            print("[Vision] Depth shape:", depth.shape)
 
             # 2. Florence-2 分割
-            print("  [Vision] Florence-2 正在分割:", target_name)
+            print("[Vision] Florence-2 正在分割:", target_name)
 
             mask, image, mask_image, polygons = segment_object(
                 rgb,
                 target_name,
             )
 
-            print("  [Vision] 分割完成")
+            print("[Vision] 分割完成")
 
             # 3. 检查 Mask 是否合理
             mask_area = int(np.sum(mask))
             mask_ratio = float(mask_area / mask.size)
 
-            print("  [Vision] Mask像素数量:", mask_area)
-            print("  [Vision] Mask占比:", round(mask_ratio, 4))
+            print("[Vision] Mask像素数量:", mask_area)
+            print("[Vision] Mask占比:", round(mask_ratio, 4))
 
             if mask_ratio > self.max_mask_ratio:
                 return ObjectObservation(
@@ -129,13 +131,26 @@ class PerceptionSystem:
             )
 
             # 5. Mask + Depth → Point Cloud → 3D位置
-            print("  [Vision] 开始 Depth + Point Cloud 三维定位")
+            print("[Vision] 开始 Depth + Point Cloud 三维定位")
 
-            grasp_position = estimate_grasp_position(
+            grasp_position, geometry_info = estimate_grasp_position(
                 mask,
                 depth,
                 mj_model,
                 mj_data,
+            )
+
+            if geometry_info["object_height"] > self.max_object_height:
+                return ObjectObservation(
+                    target_name=target_name,
+                    success=False,
+                    grasp_position=None,
+                    error=(
+                        "目标三维高度异常，"
+                        f"object_height={geometry_info['object_height']:.4f}"
+                    ),
+                    mask_area=mask_area,
+                    mask_ratio=mask_ratio,
             )
 
             grasp_position = np.asarray(
