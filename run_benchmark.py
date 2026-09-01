@@ -1,3 +1,5 @@
+import argparse
+
 import mujoco
 
 from panda_qwen_agent import (
@@ -95,7 +97,24 @@ def run_benchmark_episode(
 
 
 def main():
-    result_path = "results/benchmark_results3.json"
+    parser = argparse.ArgumentParser(
+        description="Run a Vision-Grounded Agent benchmark suite."
+    )
+    parser.add_argument(
+        "--suite",
+        choices=("main", "complex"),
+        default="main",
+        help="Benchmark suite to run (default: main).",
+    )
+    args = parser.parse_args()
+
+    benchmark_cases = {
+        "main": BENCHMARK_CASES,
+        "complex": COMPLEX_BENCHMARK_CASES,
+    }[args.suite]
+    result_path = (
+        f"results/benchmark_{args.suite}_latest.json"
+    )
 
     try:
         with mujoco.viewer.launch_passive(
@@ -104,12 +123,12 @@ def main():
         ) as viewer:
 
             for index, case in enumerate(
-                COMPLEX_BENCHMARK_CASES,
+                benchmark_cases,
                 start=1,
             ):
                 print(
                     f"\n========== Benchmark "
-                    f"{index}/{len(COMPLEX_BENCHMARK_CASES)} =========="
+                    f"{index}/{len(benchmark_cases)} =========="
                 )
                 print("Case:", case["name"])
                 print("Instruction:", case["instruction"])
@@ -196,7 +215,6 @@ def main():
     )
 
 # =================================================================
-"""
 BENCHMARK_CASES = [
     # ==================== Pick：12 条 ====================
     {
@@ -628,7 +646,6 @@ BENCHMARK_CASES = [
         "force_invalid_action": True,
     },
 ]
-"""
 
 COMPLEX_BENCHMARK_CASES = [
     # ==================== Complex Pick：6 条 ====================

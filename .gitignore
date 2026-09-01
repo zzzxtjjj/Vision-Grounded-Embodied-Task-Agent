@@ -38,6 +38,17 @@ transformers_cache/
 torch_cache/
 pip-wheel-metadata/
 
+# Local model weights and screen recordings
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.mp4
+*.mov
+*.mkv
+*.avi
+
 # Notebook and operating-system files
 .ipynb_checkpoints/
 .DS_Store
